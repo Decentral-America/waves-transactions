@@ -5,7 +5,7 @@ import { signBytes, blake2b, base58Encode } from '@waves/ts-lib-crypto'
 import { addProof, getSenderPublicKey, convertToPairs, isOrder } from '../generic'
 import {IOrderParams, WithId, WithProofs, WithSender} from '../transactions'
 import { TSeedTypes } from '../types'
-import { binary } from '@waves/marshall'
+import { binary } from '@decentralchain/marshall'
 import { validate } from '../validators'
 import {ExchangeTransactionOrder, SignedIExchangeTransactionOrder} from '@waves/ts-types'
 
@@ -91,7 +91,7 @@ export function order(paramsOrOrder: any, seed?: TSeedTypes): ExchangeTransactio
   }
 
   if (ord.version === 3 || ord.version === 4) {
-    ord.matcherFeeAssetId = paramsOrOrder.matcherFeeAssetId === 'WAVES' ? null : paramsOrOrder.matcherFeeAssetId
+    ord.matcherFeeAssetId = paramsOrOrder.matcherFeeAssetId === 'DCC' ? null : paramsOrOrder.matcherFeeAssetId
   }
 
   const bytes = binary.serializeOrder(ord)

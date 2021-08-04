@@ -3,7 +3,7 @@ import {data, libs, makeTxBytes, WithId} from '../../src'
 import {txToProtoBytes} from '../../src/proto-serialize'
 import {validateTxSignature} from '../../test/utils'
 import {dataMinimalParams} from '../minimalParams'
-import {binary} from '@waves/marshall'
+import {binary} from '@decentralchain/marshall'
 import {base64Decode} from '@waves/ts-lib-crypto/conversions/base-xx'
 import {TSeedTypes} from '../../src/types'
 

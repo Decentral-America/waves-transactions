@@ -1,6 +1,6 @@
 import * as wavesProto from '@waves/protobuf-serialization'
 import {base58Decode, base58Encode, base64Decode, base64Encode, blake2b, concat, keccak} from '@waves/ts-lib-crypto'
-import {binary, parsePrimitives, schemas, serializePrimitives} from '@waves/marshall'
+import {binary, parsePrimitives, schemas, serializePrimitives} from '@decentralchain/marshall'
 import {
     AliasTransaction,
     BurnTransaction,

@@ -1,5 +1,5 @@
 import { verifySignature } from '@waves/ts-lib-crypto'
-import { binary } from '@waves/marshall'
+import { binary } from '@decentralchain/marshall'
 
 import { TTx } from '../src'
 

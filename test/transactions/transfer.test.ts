@@ -2,7 +2,7 @@ import { publicKey, verifySignature } from '@waves/ts-lib-crypto'
 import { transfer } from '../../src'
 import { validateTxSignature } from '../../test/utils'
 import { transferMinimalParams } from '../minimalParams'
-import { binary } from '@waves/marshall'
+import { binary } from '@decentralchain/marshall'
 
 describe('transfer', () => {
 
