@@ -1,6 +1,6 @@
 {
   "name": "@decentralchain/waves-transactions",
-  "version": "4.2.4",
+  "version": "4.2.5",
   "description": "Build and sign(multi-sign) transactions for DecentralChain.",
   "keywords": [
     "decentralchain",
