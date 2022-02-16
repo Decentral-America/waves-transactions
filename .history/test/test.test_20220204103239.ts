@@ -12,7 +12,7 @@ import {waitForTxWithNConfirmations} from '../src/nodeInteraction'
 import {strengthenPassword} from '../src/seedUtils'
 
 const nodeUrl = 'http://localhost:6869'
-const masterSeed = 'DCC private node seed with waves tokens'
+const masterSeed = 'waves private node seed with waves tokens'
 const CHAIN_ID = 82
 let dappAddress1 = ''
 let dappAddress2 = ''

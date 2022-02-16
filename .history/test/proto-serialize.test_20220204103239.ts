@@ -23,7 +23,7 @@ import {issueMinimalParams} from './minimalParams'
 
 
 const nodeUrl = 'http://localhost:6869/'
-const masterSeed = 'DCC private node seed with waves tokens'
+const masterSeed = 'waves private node seed with waves tokens'
 const CHAIN_ID = 82
 let SEED = 'abc'
 const wvs = 1e8
