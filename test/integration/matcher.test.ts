@@ -1,11 +1,8 @@
-import {broadcast, cancelOrder, cancelSubmittedOrder, massTransfer, order, submitOrder, waitForTx} from '../../src'
-import {MATCHER_PUBLIC_KEY, MATCHER_URL, MASTER_SEED, TIMEOUT, randomHexString, CHAIN_ID, API_BASE} from './config'
-import {address} from '@waves/ts-lib-crypto'
-import {issue} from '../../src/transactions/issue'
-import {issueMinimalParams} from '../minimalParams'
+import { cancelOrder, cancelSubmittedOrder, order, submitOrder } from '../../src'
+import {MATCHER_PUBLIC_KEY, MATCHER_URL, MASTER_SEED, TIMEOUT, randomHexString} from './config'
 
 describe('Matcher requests', () => {
-  let assetId = 'DdoxLTeMrFvW5WgZLBmLrPBHfpJKTsWjHFZ1SA6mNroU'
+  let assetId = 'GS8e5BvJZawr3gEu5nSesDEhJw33tQ8EE4iWfVoH7TDf'
 
   beforeAll(async () => {
     const nonce = randomHexString(6)
@@ -19,9 +16,9 @@ describe('Matcher requests', () => {
     const oParams = {
       orderType: 'buy' as 'buy',
       matcherPublicKey: MATCHER_PUBLIC_KEY,
-      price: 1000000000,
-      amount: 10,
-      matcherFee: 700000,
+      price: 10000000000000,
+      amount: 1000,
+      matcherFee: 8000000,
       priceAsset: null,
       amountAsset: assetId,
     }
@@ -40,9 +37,9 @@ describe('Matcher requests', () => {
     const oParams = {
       orderType: 'buy' as 'buy',
       matcherPublicKey: MATCHER_PUBLIC_KEY,
-      price: 100000000,
-      amount: 10,
-      matcherFee: 700000,
+      price: 10000000000000,
+      amount: 1000,
+      matcherFee: 8000000,
       priceAsset: null,
       amountAsset: assetId,
     }
@@ -61,7 +58,7 @@ describe('Matcher requests', () => {
       matcherPublicKey: MATCHER_PUBLIC_KEY,
       //matcherPublicKey: publicKey(seed),
       orderType: 'buy',
-      matcherFee: 700000,
+      matcherFee: 8000000,
       amountAsset: assetId,
       priceAsset: null,
       amount: 1,
@@ -72,7 +69,7 @@ describe('Matcher requests', () => {
       matcherPublicKey: MATCHER_PUBLIC_KEY,
       //matcherPublicKey: publicKey(seed),
       orderType: 'sell',
-      matcherFee: 700000,
+      matcherFee: 8000000,
       amountAsset: assetId,
       priceAsset: null,
       amount: 1,

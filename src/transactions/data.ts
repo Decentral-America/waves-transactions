@@ -5,7 +5,7 @@ import * as wavesProto from '@waves/protobuf-serialization'
 import {binary, serializePrimitives} from '@decentralchain/marshall'
 import {base58Encode, blake2b, concat, signBytes} from '@waves/ts-lib-crypto'
 import {IDataParams, WithId, WithProofs, WithSender} from '../transactions'
-import {addProof, convertToPairs, fee, getSenderPublicKey, networkByte, normalizeAssetId} from '../generic'
+import {addProof, convertToPairs, fee, getSenderPublicKey, networkByte} from '../generic'
 import {TSeedTypes} from '../types'
 import {validate} from '../validators'
 import {dataEntryToProto, txToProtoBytes} from '../proto-serialize'
@@ -90,23 +90,22 @@ export function data(paramsOrTx: any, seed?: TSeedTypes): DataTransaction & With
             LONG(_timestamp)
         )
 
-        computedFee = (Math.floor(1 + (bytes.length - 1) / 1024) * 100000)
+        computedFee = (Math.floor(1 + (bytes.length - 1) / 1024) * 2000000)
     } else {
         let protoEntries = dataEntriesWithTypes.map(dataEntryToProto)
         let dataBytes = wavesProto.waves.DataTransactionData.encode({data: protoEntries}).finish()
-        computedFee = (Math.ceil(dataBytes.length / 1024) * 100000)
+        computedFee = (Math.ceil(dataBytes.length / 1024) * 2000000)
     }
 
 
-    const tx: DataTransaction & WithId & WithProofs & {feeAssetId?: string | null} = {
+    const tx: DataTransaction & WithId & WithProofs = {
         type,
         version,
         senderPublicKey,
         fee: fee(paramsOrTx, computedFee),
-        feeAssetId: normalizeAssetId(paramsOrTx.feeAssetId),
         timestamp: _timestamp,
         proofs: paramsOrTx.proofs || [],
-        chainId: networkByte(paramsOrTx.chainId, 87),
+        chainId: networkByte(paramsOrTx.chainId, 76),
         id: '',
         data: dataEntriesWithTypes,
     }

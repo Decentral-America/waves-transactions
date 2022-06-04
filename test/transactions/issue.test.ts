@@ -15,7 +15,7 @@ describe('issue', () => {
 
   it('should build from minimal set of params with quantity 1', () => {
     const tx = issue({ ...issueMinimalParams, quantity: 1 }, stringSeed)
-    expect(tx.fee).toEqual(1000000)
+    expect(tx.fee).toEqual(100000000000)
   })
 
   it('should build with asset script', () => {
@@ -31,17 +31,17 @@ describe('issue', () => {
   it('Should get correct signature', () => {
     const tx = issue({ ...issueMinimalParams }, stringSeed)
 
-    expect(validateTxSignature(tx, protoBytesMinVersion)).toBeTruthy()    
+    expect(validateTxSignature(tx, protoBytesMinVersion)).toBeTruthy()
   })
 
   it('Should get correct signature of NFT token', () => {
     const tx = issue({
       ...issueMinimalParams,
       quantity: 1,
-      decimals: 0,
+      decimals: 0
     }, stringSeed)
 
-    expect(validateTxSignature(tx, protoBytesMinVersion)).toBeTruthy()    
+    expect(validateTxSignature(tx, protoBytesMinVersion)).toBeTruthy()
   })
 
   it('Should sign already signed', () => {

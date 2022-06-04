@@ -1,8 +1,9 @@
-import {TRANSACTION_TYPE} from '@waves/ts-types'
+import { TRANSACTION_TYPE } from '@waves/ts-types'
 import {
   isEq,
   orEq,
   isAssetId,
+  isRecipient,
   isNumber,
   isNumberLike,
   isArray,

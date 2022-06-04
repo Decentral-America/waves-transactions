@@ -1,6 +1,7 @@
 import { publicKey } from '@waves/ts-lib-crypto'
 import { invokeScriptMinimalParams } from '../minimalParams'
 import { invokeScript } from '../../src/transactions/invoke-script'
+import { binary } from '@decentralchain/marshall'
 import { IInvokeScriptParams } from '../../src'
 import { validateTxSignature } from '../../test/utils'
 
@@ -62,7 +63,7 @@ describe('invokeScript', () => {
     const stringSeed2 = 'example seed 2'
     const tx = invokeScript({
       ...invokeScriptMinimalParams,
-      payment: [{ amount: 100, assetId: null }],
+      payment: [{ amount: 100, assetId: null }]
     }, [null, stringSeed, null, stringSeed2])
 
     expect(validateTxSignature(tx, 1, 1, publicKey(stringSeed))).toBeTruthy()

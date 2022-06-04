@@ -16,19 +16,19 @@ import { issueMinimalParams } from '../minimalParams'
 
 describe('Assets', () => {
   let account1: string, account2: string
+  let assetId = ''
   const wvs = 10 ** 8
 
   beforeAll(async () => {
     const nonce = randomHexString(6)
-    jest.setTimeout(60000)
 
     account1 = 'account1' + nonce
     account2 = 'account2' + nonce
     const mtt = massTransfer({
       transfers: [
-        { recipient: address(account1, CHAIN_ID), amount: 6 * wvs },
-        { recipient: address(account2, CHAIN_ID), amount: 1 * wvs },
-      ],
+        { recipient: address(account1, CHAIN_ID), amount: 6000 * wvs},
+        { recipient: address(account2, CHAIN_ID), amount: 5500 * wvs }
+      ]
     }, MASTER_SEED)
     await broadcast(mtt, API_BASE)
     await waitForTx(mtt.id, {apiBase: API_BASE, timeout: TIMEOUT})
@@ -59,7 +59,7 @@ describe('Assets', () => {
       const txParams: IReissueParams = {
         reissuable: true,
         assetId,
-        quantity: 1000,
+        quantity: 100,
         chainId: CHAIN_ID,
       }
       const tx = reissue(txParams, account1)
@@ -153,6 +153,7 @@ describe('Assets', () => {
         assetId,
         chainId: CHAIN_ID,
         script,
+        additionalFee: 4000000,
       }
       const tx = setAssetScript(txParams, account1)
       const resp = await broadcast(tx, API_BASE)
@@ -163,7 +164,7 @@ describe('Assets', () => {
         assetId,
         amount: '1000',
         chainId: CHAIN_ID,
-        additionalFee: 400000,
+        additionalFee: 4000000,
       }
       const burnTx = burn(burnParams, account1)
       const burnResp = await broadcast(burnTx, API_BASE)
@@ -216,13 +217,13 @@ describe('Assets', () => {
       const issueTx = issue(txParams, account1)
       assetId = issueTx.id
       await broadcast(issueTx, API_BASE)
-      // GIVE DCC TO TEST ACC
-      // const transferTx = transfer({ recipient: address(account2, CHAIN_ID), amount: 100000000, chainId: CHAIN_ID }, MASTER_SEED)
-      // await broadcast(transferTx, API_BASE)
+      // GIVE WAVES TO TEST ACC
+      const transferTx = transfer({ recipient: address(account2, 'l'), amount: 4000000 }, MASTER_SEED)
+      await broadcast(transferTx, API_BASE)
 
       //WAIT BOTH TX TO COMPLETE
       await waitForTx(issueTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
-      // await waitForTx(transferTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
+      await waitForTx(transferTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
       /////////////////////////
 
       //assetId = 'qmhEv7NeL39kDiWBVfzZh6aT1ZwzpD7y1CFxvmiH78U'
@@ -231,7 +232,7 @@ describe('Assets', () => {
         //matcherPublicKey,
         matcherPublicKey: publicKey(account1),
         orderType: 'buy',
-        matcherFee: 300000,
+        matcherFee: 4000000,
         amountAsset: assetId,
         priceAsset: null,
         amount: 1,
@@ -242,15 +243,15 @@ describe('Assets', () => {
         //matcherPublicKey,
         matcherPublicKey: publicKey(account1),
         orderType: 'sell',
-        matcherFee: 300000,
+        matcherFee: 4000000,
         amountAsset: assetId,
         priceAsset: null,
         amount: 1,
         price: 100000000,
       }, account1)
 
-      //await submitOrder(order1, matcherUrl)
-      //await submitOrder(order2, matcherUrl)
+        //await submitOrder(order1, matcherUrl)
+        //await submitOrder(order2, matcherUrl)
 
       const exchangeTx = exchange({
         type: 7,
@@ -264,8 +265,8 @@ describe('Assets', () => {
         sellMatcherFee: order2.matcherFee,
         timestamp: Date.now(),
         proofs: [],
-        fee: 300000,
-        senderPublicKey: publicKey(account1),
+        fee: 4000000,
+        senderPublicKey: publicKey(account1)
       }, account1)
 
       const resp = await broadcast(exchangeTx, API_BASE)
@@ -274,5 +275,5 @@ describe('Assets', () => {
         throw e
       }
     }, TIMEOUT)
-  })
+ })
 })
