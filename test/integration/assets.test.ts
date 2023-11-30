@@ -15,24 +15,25 @@ import { MASTER_SEED, CHAIN_ID, TIMEOUT, API_BASE, randomHexString } from './con
 import { issueMinimalParams } from '../minimalParams'
 
 describe('Assets', () => {
-  let account1: string, account2: string
-  let assetId = ''
   const wvs = 10 ** 8
 
-  beforeAll(async () => {
-    const nonce = randomHexString(6)
+  const account1 = 'jungle property method used observe any mirror dial road famous wonder satisfy curve pledge piece'
+  const account2 = 'torch walk scout grocery drum infant antique fatal boil key salute ribbon trick bean object'
 
-    account1 = 'account1' + nonce
-    account2 = 'account2' + nonce
+  const address1 = address(account1, CHAIN_ID)
+  const address2 = address(account2, CHAIN_ID)
+
+  beforeAll(async () => {
+    jest.setTimeout(60000)
+
     const mtt = massTransfer({
       transfers: [
-        { recipient: address(account1, CHAIN_ID), amount: 6000 * wvs},
-        { recipient: address(account2, CHAIN_ID), amount: 5500 * wvs }
-      ]
+        { recipient: address(account1, CHAIN_ID), amount: 5.016 * wvs },
+        { recipient: address(account2, CHAIN_ID), amount: 0.1 * wvs },
+      ],
     }, MASTER_SEED)
     await broadcast(mtt, API_BASE)
     await waitForTx(mtt.id, {apiBase: API_BASE, timeout: TIMEOUT})
-    console.log('Assets test setup successful\n Accounts nonce = ' + nonce)
   }, TIMEOUT)
 
   describe('Ordinary assets', () => {
@@ -43,23 +44,24 @@ describe('Assets', () => {
         name: 'Test token',
         description: 'no description',
         decimals: 3,
+        additionalFee: 400000,
         quantity: 1000,
         chainId: CHAIN_ID,
         reissuable: true,
       }
 
       const tx = issue(txParams, account1)
-      const resp = await broadcast(tx, API_BASE)
-      expect(resp.type).toEqual(3)
       assetId = tx.id
+      const resp = await broadcast(tx, API_BASE)
       await waitForTx(assetId, { apiBase: API_BASE, timeout: TIMEOUT })
+      expect(resp.type).toEqual(3)
     }, TIMEOUT)
 
     it('Should ReIssue token', async () => {
       const txParams: IReissueParams = {
         reissuable: true,
         assetId,
-        quantity: 100,
+        quantity: 1000,
         chainId: CHAIN_ID,
       }
       const tx = reissue(txParams, account1)
@@ -82,7 +84,7 @@ describe('Assets', () => {
       const transferParams: ITransferParams = {
         amount: '500',
         assetId,
-        recipient: address(account2, CHAIN_ID),
+        recipient: address2,
         attachment: '3MyAGEBuZGDKZDzYn6sbh2noqk9uYHy4kjw',
       }
 
@@ -97,11 +99,11 @@ describe('Assets', () => {
         assetId,
         transfers: [
           {
-            recipient: address(account2, CHAIN_ID),
+            recipient: address1,
             amount: '100',
           },
           {
-            recipient: address(account2, CHAIN_ID),
+            recipient: address2,
             amount: '100',
           },
         ],
@@ -153,7 +155,6 @@ describe('Assets', () => {
         assetId,
         chainId: CHAIN_ID,
         script,
-        additionalFee: 4000000,
       }
       const tx = setAssetScript(txParams, account1)
       const resp = await broadcast(tx, API_BASE)
@@ -164,7 +165,7 @@ describe('Assets', () => {
         assetId,
         amount: '1000',
         chainId: CHAIN_ID,
-        additionalFee: 4000000,
+        additionalFee: 400000,
       }
       const burnTx = burn(burnParams, account1)
       const burnResp = await broadcast(burnTx, API_BASE)
@@ -218,12 +219,12 @@ describe('Assets', () => {
       assetId = issueTx.id
       await broadcast(issueTx, API_BASE)
       // GIVE WAVES TO TEST ACC
-      const transferTx = transfer({ recipient: address(account2, 'l'), amount: 4000000 }, MASTER_SEED)
-      await broadcast(transferTx, API_BASE)
+      // const transferTx = transfer({ recipient: address(account2, CHAIN_ID), amount: 100000000, chainId: CHAIN_ID }, MASTER_SEED)
+      // await broadcast(transferTx, API_BASE)
 
       //WAIT BOTH TX TO COMPLETE
       await waitForTx(issueTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
-      await waitForTx(transferTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
+      // await waitForTx(transferTx.id, { timeout: TIMEOUT, apiBase: API_BASE })
       /////////////////////////
 
       //assetId = 'qmhEv7NeL39kDiWBVfzZh6aT1ZwzpD7y1CFxvmiH78U'
@@ -232,26 +233,26 @@ describe('Assets', () => {
         //matcherPublicKey,
         matcherPublicKey: publicKey(account1),
         orderType: 'buy',
-        matcherFee: 4000000,
+        matcherFee: 300000,
         amountAsset: assetId,
         priceAsset: null,
         amount: 1,
-        price: 100000000,
+        price: 10000,
       }, account2)
 
       const order2 = order({
         //matcherPublicKey,
         matcherPublicKey: publicKey(account1),
         orderType: 'sell',
-        matcherFee: 4000000,
+        matcherFee: 300000,
         amountAsset: assetId,
         priceAsset: null,
         amount: 1,
-        price: 100000000,
+        price: 10000,
       }, account1)
 
-        //await submitOrder(order1, matcherUrl)
-        //await submitOrder(order2, matcherUrl)
+      //await submitOrder(order1, matcherUrl)
+      //await submitOrder(order2, matcherUrl)
 
       const exchangeTx = exchange({
         type: 7,
@@ -259,14 +260,14 @@ describe('Assets', () => {
         version: 2,
         order1,
         order2,
-        price: 100000000,
+        price: 10000,
         amount: 1,
         buyMatcherFee: order1.matcherFee,
         sellMatcherFee: order2.matcherFee,
         timestamp: Date.now(),
         proofs: [],
-        fee: 4000000,
-        senderPublicKey: publicKey(account1)
+        fee: 300000,
+        senderPublicKey: publicKey(account1),
       }, account1)
 
       const resp = await broadcast(exchangeTx, API_BASE)
@@ -275,5 +276,5 @@ describe('Assets', () => {
         throw e
       }
     }, TIMEOUT)
- })
+  })
 })

@@ -18,9 +18,9 @@ describe('Smart features', () => {
     account2 = 'account2' + nonce
     const mtt = massTransfer({
       transfers: [
-        { recipient: address(account1, CHAIN_ID), amount: 10000 * wvs },
-        { recipient: address(account2, CHAIN_ID), amount: 10000 * wvs },
-      ]
+        { recipient: address(account1, CHAIN_ID), amount: 0.1 * wvs },
+        { recipient: address(account2, CHAIN_ID), amount: 1100000 },
+      ],
     }, MASTER_SEED)
     await broadcast(mtt, API_BASE)
     await waitForTx(mtt.id, { apiBase: API_BASE, timeout: TIMEOUT })
@@ -90,7 +90,7 @@ describe('Smart features', () => {
         senderPublicKey: publicKey(account1),
         chainId: CHAIN_ID,
         script: null,
-        additionalFee: 4000000,
+        additionalFee: 400000,
       }
 
       const removeTx = setScript(removeTxParams, [null, 'bob', 'cooper'])
@@ -111,6 +111,7 @@ describe('Smart features', () => {
       {-# STDLIB_VERSION 3 #-}
       {-# CONTENT_TYPE DAPP #-}
       {-# SCRIPT_TYPE ACCOUNT #-}
+
       @Callable(i)
       func foo(a: Int) = {
           TransferSet([ScriptTransfer(i.caller, a, unit)])
@@ -125,7 +126,6 @@ describe('Smart features', () => {
           script,
         }
         const tx = setScript(txParams, account2)
-        console.log(libs.crypto.base64Encode(txToProtoBytes(tx)))
         await broadcast(tx, API_BASE)
         await waitForTx(tx.id, { timeout: TIMEOUT, apiBase: API_BASE })
         console.log('dApp account script has been set')
@@ -139,14 +139,14 @@ describe('Smart features', () => {
       const dappAddress = address(account2, CHAIN_ID)
 
       const invokeTx = invokeScript({
-            chainId: CHAIN_ID,
-            dApp: dappAddress,
-            additionalFee: 4000000,
-            call: {
-              function: 'foo', args: [{ type: 'integer', value: 10000 }],
-            },
+          chainId: CHAIN_ID,
+          dApp: dappAddress,
+          call: {
+            function: 'foo', args: [{ type: 'integer', value: 10000 }],
           },
-          account1)
+          fee: 900000
+        },
+        account1)
 
       await broadcast(invokeTx, API_BASE)
 
